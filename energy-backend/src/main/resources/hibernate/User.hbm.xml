@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="dz.energy.energy_backend.model">
+
+
+    <class name="User" table="user" abstract="true">
+        <id name="id" type="integer" column="id">
+            <generator class="table">
+                <param name="table">hibernate_ids</param>
+                <param name="column">next_id</param>
+                <param name="segment_column">entity</param>
+                <param name="segment_value">User</param>
+            </generator>
+        </id>
+
+
+        <property name="firstName" type="string" column="first_name" not-null="true"/>
+        <property name="lastName" type="string" column="last_name" not-null="true"/>
+        <property name="email" type="string" column="email" not-null="true" unique="true"/>
+        <property name="birthDate" type="date" column="birth_date"/>
+        <property name="password" type="string" column="password" not-null="true"/>
+        <property name="phoneNumber" type="integer" column="phone_number"/>
+
+        <union-subclass name="Client" table="client">
+            <component name="location" class="Location">
+                <property name="latitude" type="double" column="latitude"/>
+                <property name="longitude" type="double" column="longitude"/>
+                <property name="street" type="string" column="street"/>
+                <property name="city" type="string" column="city"/>
+                <property name="zipCode" type="string" column="zip_code"/>
+                <property name="country" type="string" column="country"/>
+            </component>
+            <one-to-one name="task" class="Task" property-ref="client" cascade="all" />
+        </union-subclass>
+
+        <union-subclass name="Admin" table="admin">
+            <list name="permissions" table="admin_permissions">
+                <key column="admin_id"/>
+                <list-index column="idx_perm"/>
+                <element type="string" column="permission"/>
+            </list>
+        </union-subclass>
+
+        <union-subclass name="Worker" table="worker">
+            <set name="tasks" cascade="all" inverse="true">
+                <key column="worker_id"/>
+                <one-to-many class="Task"/>
+            </set>
+        </union-subclass>
+
+
+        <union-subclass name="Seller" table="seller">
+            <set name="productItems" cascade="all" inverse="true">
+                <key column="seller_id"/>
+                <one-to-many class="ProductItem"/>
+            </set>
+        </union-subclass>
+    </class>
+
+</hibernate-mapping>

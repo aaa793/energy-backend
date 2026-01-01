@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="dz.energy.energy_backend.model">
+
+
+    <class name="Product" table="product">
+
+        <id name="id" type="integer" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="serialNumber" type="string" column="serial_number"/>
+        <property name="name" type="string" column="name"/>
+        <property name="description" type="string" column="description"/>
+
+        <set name="productItems" inverse="true">
+            <key column="product_id"/>
+            <one-to-many class="ProductItem"/>
+        </set>
+        <set name="tasks" inverse="true">
+            <key column="product_id"/>
+            <one-to-many class="Task"/>
+        </set>
+
+    </class>
+
+</hibernate-mapping>
