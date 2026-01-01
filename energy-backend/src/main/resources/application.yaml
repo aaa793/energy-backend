@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/energy_db?createDatabaseIfNotExist=true
+    url: jdbc:mysql://trolley.proxy.rlwy.net:31800/railway
     username: root
-    password:
+    password: CZfevheGiexrZbkcxntCXClyYhQJxBDN
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -13,16 +13,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
         format_sql: true
-        archive:
-          autodetection: none
-        mapping-resources:
-          - hibernate/User.hbm.xml
-          - hibernate/Product.hbm.xml
-          - hibernate/ProductItem.hbm.xml
-          - hibernate/Task.hbm.xml
 
 server:
   port: 8081
   address: 0.0.0.0
-
-
