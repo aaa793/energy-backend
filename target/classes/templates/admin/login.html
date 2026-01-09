@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffe5b4;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            width: 380px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,.2);
+            text-align: center;
+        }
+
+        h2 {
+            color: #e67e22;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #f6c27a;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e67e22;
+        }
+
+        .link {
+            margin-top: 15px;
+            display: block;
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #fadbd8;
+            color: #c0392b;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .success {
+            background: #d4efdf;
+            color: #27ae60;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>☀️ Connexion</h2>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <div th:if="${success}" class="success" th:text="${success}"></div>
+
+    <form th:action="@{/admin/login}" th:object="${loginRequest}" method="post">
+        <input type="email" th:field="*{email}" placeholder="📧 Email" required/>
+        <input type="password" th:field="*{password}" placeholder="🔒 Mot de passe" required/>
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <a class="link" th:href="@{/admin/signup}">Créer un compte</a>
+    <a class="link" th:href="@{/password/forgot}">Mot de passe oublié ?</a>
+
+
+</div>
+
+</body>
+</html>

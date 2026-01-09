@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background:#ffe5b4;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            width: 420px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0,0,0,.2);
+        }
+
+        h2 {
+            text-align: center;
+            color: #e67e22;
+            margin-bottom: 20px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 14px;
+            border-radius: 8px;
+            border: 1px solid #f6c27a;
+            font-size: 14px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #f39c12;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #e67e22;
+        }
+
+        .link {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
+            color: #e67e22;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .link:hover {
+            text-decoration: underline;
+        }
+
+        .error {
+            background: #fadbd8;
+            color: #c0392b;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>☀️ Création de compte</h2>
+
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+
+    <form th:action="@{/admin/signup}" th:object="${registerRequest}" method="post">
+
+        <input th:field="*{firstName}" placeholder="Prénom" required/>
+        <input th:field="*{lastName}" placeholder="Nom" required/>
+        <input type="email" th:field="*{email}" placeholder="Email" required/>
+        <input type="password" th:field="*{password}" placeholder="Mot de passe" required/>
+        <input th:field="*{phoneNumber}" placeholder="Téléphone" required/>
+        <input type="date" th:field="*{birthDate}"/>
+
+        <select th:field="*{role}" required>
+            <option value="">-- Choisir un rôle --</option>
+            <option value="ADMIN">Admin</option>
+            <option value="SELLER">Seller</option>
+        </select>
+
+        <button type="submit">Créer le compte</button>
+    </form>
+
+    <a class="link" th:href="@{/admin/login}">
+        Déjà un compte ? Se connecter
+    </a>
+</div>
+
+</body>
+</html>

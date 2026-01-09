@@ -1,15 +1,17 @@
 package dz.energy.energy_backend.controller;
 
-import dz.energy.energy_backend.dto.ProductItemDTO;
+import dz.energy.energy_backend.dto.MobileProductDTO;
+import dz.energy.energy_backend.model.Product;
 import dz.energy.energy_backend.model.ProductItem;
 import dz.energy.energy_backend.service.ProductItemService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/mobile")
-@CrossOrigin // IMPORTANT pour Android
+@CrossOrigin("*")
 public class MobileProductController {
 
     private final ProductItemService itemService;
@@ -18,18 +20,27 @@ public class MobileProductController {
         this.itemService = itemService;
     }
 
-    // 👉 Produits visibles pour le client mobile
     @GetMapping("/products")
-    public List<ProductItemDTO> getAllProducts() {
+    public List<MobileProductDTO> getProductsForMobile() {
 
-        return itemService.findAll()
-                .stream()
-                .map(item -> new ProductItemDTO(
-                        item.getProduct().getName(),
-                        item.getProduct().getDescription(),
-                        item.getProduct().getSerialNumber(),
-                        item.getPrice()
-                ))
-                .toList();
+        return itemService.findAll().stream().map(item -> {
+
+            Product product = item.getProduct();
+
+            MobileProductDTO dto = new MobileProductDTO();
+            dto.setName(product.getName());
+            dto.setDescription(product.getDescription());
+            dto.setPrice(item.getPrice());
+
+            // 🔹 Catégorie (exemple simple)
+            dto.setCategory("Panneaux Solaires");
+
+            // 🔹 URL de l'image pour Android
+            dto.setImageResId("http://192.168.1.2:8081/uploads/" + product.getImageUrl());
+
+
+            return dto;
+        }).toList();
     }
+
 }

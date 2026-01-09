@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="dz.energy.energy_backend.model">
+
+
+    <class name="Task" table="task">
+        <id name="id" type="integer" column="id">
+            <generator class="native"/>
+        </id>
+
+        <property name="description" type="string" column="description"/>
+        <property name="status" type="string" column="status"/>
+        <property name="createdAt" type="date" column="created_at"/>
+        <property name="confirmedAt" type="date" column="confirmed_at"/>
+        <property name="achievedAt" type="date" column="achieved_at"/>
+
+        <many-to-one name="client" column="client_id" unique="true" not-null="true" cascade="all"/>
+        <many-to-one name="worker" class="Worker" column="worker_id" not-null="true"/>
+
+
+        <many-to-one name="product" class="Product" column="product_id" not-null="true"/>
+    </class>
+
+</hibernate-mapping>

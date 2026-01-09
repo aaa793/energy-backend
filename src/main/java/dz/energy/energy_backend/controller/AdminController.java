@@ -7,15 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     private final UserService service;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     public AdminController(UserService service) {
         this.service = service;
+        this.passwordEncoder = new BCryptPasswordEncoder(); // 🔒 Encodage mot de passe
     }
 
     // ===== PAGE FRONT: LIST USERS =====
@@ -38,14 +41,14 @@ public class AdminController {
         User user = service.findById(id);
         if (user != null) {
             UserDTO dto = new UserDTO();
+            dto.setId(user.getId());
             dto.setFirstName(user.getFirstName());
             dto.setLastName(user.getLastName());
             dto.setEmail(user.getEmail());
-            dto.setPassword(user.getPassword());
+            dto.setPassword(""); // 🔒 On ne préremplit pas le mot de passe
             dto.setPhoneNumber(user.getPhoneNumber());
             dto.setBirthDate(user.getBirthDate());
             dto.setRole(user.getRole());
-            dto.setId(user.getId()); // Ajouté pour l’édition
 
             model.addAttribute("user", dto);
             model.addAttribute("roles", Role.values());
@@ -65,8 +68,7 @@ public class AdminController {
             // ===== UPDATE EXISTING USER =====
             newUser = service.findById(userDTO.getId());
             if (newUser == null) {
-                // Si l'id n'existe pas, on redirige ou crée un nouvel utilisateur
-                newUser = new Admin(); // ou throw exception
+                newUser = new Admin(); // fallback
             }
         } else {
             // ===== CREATE NEW USER =====
@@ -83,7 +85,12 @@ public class AdminController {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail());
-        newUser.setPassword(userDTO.getPassword());
+
+        // 🔒 Encoder le mot de passe uniquement si il est renseigné
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setBirthDate(userDTO.getBirthDate());
         newUser.setRole(userDTO.getRole());
@@ -92,7 +99,6 @@ public class AdminController {
 
         return "redirect:/admin/users";
     }
-
 
     // ===== DELETE USER =====
     @GetMapping("/users/delete/{id}")
@@ -111,6 +117,7 @@ public class AdminController {
     // ===== REST API: SAVE USER (JSON) =====
     @PostMapping("/api/users/save")
     @ResponseBody
+
     public ResponseEntity<?> saveUserJson(@RequestBody UserDTO userDTO) {
 
         User newUser;
@@ -123,10 +130,15 @@ public class AdminController {
         }
 
         if (userDTO.getId() != null) newUser.setId(userDTO.getId());
+
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setEmail(userDTO.getEmail());
-        newUser.setPassword(userDTO.getPassword());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        }
+
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setBirthDate(userDTO.getBirthDate());
         newUser.setRole(userDTO.getRole());
