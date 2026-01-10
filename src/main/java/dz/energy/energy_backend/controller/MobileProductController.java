@@ -31,16 +31,12 @@ public class MobileProductController {
             dto.setName(product.getName());
             dto.setDescription(product.getDescription());
             dto.setPrice(item.getPrice());
-
-            // 🔹 Catégorie (exemple simple)
             dto.setCategory("Panneaux Solaires");
 
-            // 🔹 URL de l'image pour Android
-            dto.setImageResId("http://192.168.1.2:8081/uploads/" + product.getImageUrl());
-
+            // ✅ URL Cloudinary DIRECTE
+            dto.setImageResId(product.getImageUrl());
 
             return dto;
-        }).toList();
+        }).collect(Collectors.toList());
     }
-
 }

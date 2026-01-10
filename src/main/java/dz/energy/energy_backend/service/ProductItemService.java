@@ -8,39 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-//@Service
-//public class ProductItemService {
-//
-//    private final ProductItemRepository repo;
-//
-//    public ProductItemService(ProductItemRepository repo) {
-//        this.repo = repo;
-//    }
-//
-//    public List<ProductItem> findBySeller(Integer sellerId) {
-//        return repo.findBySellerId(sellerId);
-//    }
-//
-//    public ProductItem findById(Integer id) {
-//        return repo.findById(id).orElse(null);
-//    }
-//
-//    public ProductItem save(ProductItem item) {
-//        return repo.save(item);
-//    }
-//
-//    public void delete(Integer id) {
-//        repo.deleteById(id);
-//    }
-//    public List<ProductItem> findAll() {
-//        return repo.findAll();
-//    }
-//
-//}
-
-
-
-
 @Service
 public class ProductItemService {
 
@@ -53,20 +20,27 @@ public class ProductItemService {
         this.productRepo = productRepo;
     }
 
-
+    // ================= FIND ALL =================
     public List<ProductItem> findAll() {
         return itemRepo.findAll();
     }
 
-
+    // ================= FIND BY SELLER =================
     public List<ProductItem> findBySeller(Integer sellerId) {
         return itemRepo.findBySellerId(sellerId);
     }
 
+    // ================= FIND BY ID =================
+    public ProductItem findById(Integer itemId) {
+        return itemRepo.findById(itemId).orElse(null);
+    }
+
+    // ================= SAVE =================
     public ProductItem save(ProductItem item) {
         return itemRepo.save(item);
     }
 
+    // ================= DELETE =================
     public void delete(Integer itemId) {
 
         ProductItem item = itemRepo.findById(itemId).orElse(null);
@@ -74,15 +48,15 @@ public class ProductItemService {
 
         Product product = item.getProduct();
 
-        // 1️⃣ Supprimer ProductItem
+        // 1️⃣ supprimer le lien seller ↔ product
         itemRepo.delete(item);
 
-        // 2️⃣ Supprimer Product associé
+        // 2️⃣ supprimer le produit UNIQUEMENT s’il n’est plus utilisé
         if (product != null) {
-            productRepo.delete(product);
+            boolean stillUsed = itemRepo.existsByProduct(product);
+            if (!stillUsed) {
+                productRepo.delete(product);
+            }
         }
     }
 }
-
-
-
