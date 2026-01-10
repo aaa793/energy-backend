@@ -5,6 +5,7 @@ spring:
     password: GhI1GilQkIjNz4Z7uvMh7ZJ6JLcK2Efd
     driver-class-name: org.postgresql.Driver
 
+
   jpa:
     hibernate:
       ddl-auto: update
