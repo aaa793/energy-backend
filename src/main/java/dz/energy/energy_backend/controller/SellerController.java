@@ -36,11 +36,8 @@ public class SellerController {
     // ================= LISTE PRODUITS =================
     @GetMapping("/products")
     public String products(@RequestParam Integer sellerId, Model model) {
-
         Seller seller = sellerService.findById(sellerId);
-        if (seller == null) {
-            return "redirect:/error";
-        }
+        if (seller == null) return "redirect:/error";
 
         model.addAttribute("items", itemService.findBySeller(sellerId));
         model.addAttribute("sellerId", sellerId);
@@ -50,11 +47,8 @@ public class SellerController {
     // ================= FORM AJOUT =================
     @GetMapping("/products/new")
     public String addForm(@RequestParam Integer sellerId, Model model) {
-
         Seller seller = sellerService.findById(sellerId);
-        if (seller == null) {
-            return "redirect:/error";
-        }
+        if (seller == null) return "redirect:/error";
 
         model.addAttribute("sellerId", sellerId);
         return "admin/seller/product-form";
@@ -72,16 +66,13 @@ public class SellerController {
     ) throws IOException {
 
         Seller seller = sellerService.findById(sellerId);
-        if (seller == null) {
-            return "redirect:/error";
-        }
+        if (seller == null) return "redirect:/error";
 
-        // Image obligatoire à la création
         if (image == null || image.isEmpty()) {
             return "redirect:/seller/products/new?sellerId=" + sellerId;
         }
 
-        String imageUrl = imageUploadService.uploadImage(image);
+        String imageUrl = imageUploadService.uploadImage(image); // ☁️ Cloudinary
 
         Product product = new Product();
         product.setName(name);
@@ -108,14 +99,12 @@ public class SellerController {
                            Model model) {
 
         ProductItem item = itemService.findById(itemId);
-
         if (item == null || !item.getSeller().getId().equals(sellerId)) {
             return "redirect:/error";
         }
 
         model.addAttribute("item", item);
         model.addAttribute("sellerId", sellerId);
-
         return "admin/seller/product-edit-form";
     }
 
@@ -132,25 +121,22 @@ public class SellerController {
     ) throws IOException {
 
         ProductItem item = itemService.findById(itemId);
-
         if (item == null || !item.getSeller().getId().equals(sellerId)) {
             return "redirect:/error";
         }
 
         Product product = item.getProduct();
-
         product.setName(name);
         product.setDescription(description);
         product.setSerialNumber(serialNumber);
 
-        // Image facultative en update
+        // ☁️ Update image seulement si l'utilisateur fournit une nouvelle image
         if (image != null && !image.isEmpty()) {
             String imageUrl = imageUploadService.uploadImage(image);
             product.setImageUrl(imageUrl);
         }
 
         productService.save(product);
-
         item.setPrice(price);
         itemService.save(item);
 
@@ -163,9 +149,8 @@ public class SellerController {
                          @RequestParam Integer sellerId) {
 
         ProductItem item = itemService.findById(itemId);
-
         if (item != null && item.getSeller().getId().equals(sellerId)) {
-            itemService.delete(itemId);
+            itemService.delete(itemId); // Supprime ProductItem + Product
         }
 
         return "redirect:/seller/products?sellerId=" + sellerId;

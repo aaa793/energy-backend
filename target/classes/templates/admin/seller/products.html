@@ -74,29 +74,24 @@
         <th>Description</th>
         <th>Numéro</th>
         <th>Prix</th>
-        <th>Action</th>
+        <th>Actions</th>
     </tr>
 
     <tr th:each="item : ${items}">
         <td>
-            <img th:if="${item.product.imageUrl}"
-                 th:src="@{${item.product.imageUrl}}"
-                 alt="Produit">
+            <img th:if="${item.product.imageUrl}" th:src="${item.product.imageUrl}" alt="Produit">
         </td>
-
         <td th:text="${item.product.name}"></td>
         <td th:text="${item.product.description}"></td>
         <td th:text="${item.product.serialNumber}"></td>
         <td th:text="${item.price}"></td>
-
         <td>
-            <a class="btn-delete"
-               th:href="@{/seller/products/delete/{id}(id=${item.id}, sellerId=${sellerId})}">
-                Supprimer
-            </a>
+            <a th:href="@{/seller/products/edit/{itemId}(itemId=${item.id}, sellerId=${sellerId})}" class="btn">✏️ Modifier</a>
+            <a th:href="@{/seller/products/delete/{id}(id=${item.id}, sellerId=${sellerId})}" class="btn-delete">❌ Supprimer</a>
         </td>
     </tr>
 </table>
+
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Ajouter un produit</title>
+    <title>Modifier un produit</title>
     <style>
         body { font-family: Arial; background: #fdebd0; padding: 40px; }
         form { background: white; width: 420px; padding: 25px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.15); }
@@ -14,28 +14,32 @@
 </head>
 <body>
 
-<h2>☀️ Ajouter un Produit</h2>
+<h2>✏️ Modifier le Produit</h2>
 
-<form th:action="@{/seller/products/save(sellerId=${sellerId})}"
+<form th:action="@{/seller/products/update}"
       method="post"
       enctype="multipart/form-data">
 
+    <input type="hidden" name="itemId" th:value="${item.id}">
+    <input type="hidden" name="sellerId" th:value="${sellerId}">
+
     <label>Nom du produit</label>
-    <input type="text" name="name" required>
+    <input type="text" name="name" th:value="${item.product.name}" required>
 
     <label>Description</label>
-    <input type="text" name="description" required>
+    <input type="text" name="description" th:value="${item.product.description}" required>
 
     <label>Numéro de série</label>
-    <input type="text" name="serialNumber" required>
+    <input type="text" name="serialNumber" th:value="${item.product.serialNumber}" required>
 
     <label>Prix (DA)</label>
-    <input type="number" name="price" step="0.01" required>
+    <input type="number" name="price" th:value="${item.price}" step="0.01" required>
 
     <label>Image du produit</label>
-    <input type="file" name="image" accept="image/*" required>
+    <input type="file" name="image" accept="image/*">
+    <p>Image actuelle : <img th:src="${item.product.imageUrl}" width="80"/></p>
 
-    <button type="submit">➕ Ajouter</button>
+    <button type="submit">💾 Mettre à jour</button>
 </form>
 
 </body>

@@ -2,77 +2,35 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Ajouter un produit</title>
-
     <style>
-        body {
-            font-family: Arial;
-            background: #fdebd0;
-            padding: 40px;
-        }
-
-        form {
-            background: white;
-            width: 420px;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0,0,0,.15);
-        }
-
-        h2 {
-            color: #e67e22;
-        }
-
-        label {
-            font-weight: bold;
-            margin-top: 10px;
-            display: block;
-        }
-
-        input {
-            width: 100%;
-            padding: 9px;
-            margin-top: 5px;
-            border-radius: 6px;
-            border: 1px solid #f6c27a;
-        }
-
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            background: #f39c12;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background: #e67e22;
-        }
+        body { font-family: Arial; background: #fdebd0; padding: 40px; }
+        form { background: white; width: 420px; padding: 25px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.15); }
+        h2 { color: #e67e22; }
+        label { font-weight: bold; margin-top: 10px; display: block; }
+        input { width: 100%; padding: 9px; margin-top: 5px; border-radius: 6px; border: 1px solid #f6c27a; }
+        button { margin-top: 20px; width: 100%; padding: 12px; background: #f39c12; color: white; border: none; border-radius: 6px; font-size: 16px; }
+        button:hover { background: #e67e22; }
     </style>
 </head>
-
 <body>
 
 <h2>☀️ Ajouter un Produit</h2>
 
 <form th:action="@{/seller/products/save(sellerId=${sellerId})}"
       method="post"
-      enctype="multipart/form-data"
-      th:object="${itemDTO}">
+      enctype="multipart/form-data">
 
     <label>Nom du produit</label>
-    <input type="text" th:field="*{name}" required>
+    <input type="text" name="name" required>
 
     <label>Description</label>
-    <input type="text" th:field="*{description}" required>
+    <input type="text" name="description" required>
 
     <label>Numéro de série</label>
-    <input type="text" th:field="*{serialNumber}" required>
+    <input type="text" name="serialNumber" required>
 
     <label>Prix (DA)</label>
-    <input type="number" th:field="*{price}" step="0.01" required>
+    <input type="number" name="price" step="0.01" required>
 
     <label>Image du produit</label>
     <input type="file" name="image" accept="image/*" required>
