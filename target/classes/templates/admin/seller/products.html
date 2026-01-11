@@ -5,22 +5,28 @@
 
     <style>
         body {
-            font-family: Arial;
-            background: #fdebd0;
-            padding: 30px;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f7f1e3; /* beige clair */
+            padding: 40px;
         }
 
         h2 {
-            color: #e67e22;
+            text-align: center;
+            color: #000;
+            font-size: 34px;
+            font-weight: 700;
+            margin-bottom: 30px;
         }
 
         .btn {
             background: #f39c12;
-            padding: 10px 16px;
+            padding: 10px 18px;
             color: white;
             border-radius: 6px;
             font-weight: bold;
             text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
         }
 
         table {
@@ -28,40 +34,76 @@
             background: white;
             border-collapse: collapse;
             margin-top: 20px;
-            box-shadow: 0 0 15px rgba(0,0,0,.1);
+            box-shadow: 0 6px 18px rgba(0,0,0,.12);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
         th {
             background: #f39c12;
             color: white;
-            padding: 12px;
+            padding: 14px;
+            font-size: 15px;
         }
 
         td {
-            padding: 12px;
+            padding: 14px;
             border-bottom: 1px solid #f6c27a;
             text-align: center;
+            vertical-align: middle;
         }
 
         img {
-            width: 80px;
+            width: 70px;
             height: auto;
             border-radius: 6px;
         }
 
-        .btn-delete {
-            background: #e74c3c;
-            padding: 6px 10px;
-            color: white;
-            border-radius: 6px;
+        /* Réduction description */
+        .desc {
+            max-width: 260px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: auto;
+        }
+
+        /* Boutons actions */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
             text-decoration: none;
+            font-size: 16px;
+            color: white;
+        }
+
+        .edit-btn {
+            background: #3498db;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+        }
+
+        .icon-btn:hover {
+            opacity: 0.85;
         }
     </style>
 </head>
 
 <body>
 
-<h2>🔆 Mes Produits</h2>
+<h2>Mes Produits</h2>
 
 <a class="btn" th:href="@{/seller/products/new(sellerId=${sellerId})}">
     ➕ Nouveau produit
@@ -73,25 +115,45 @@
         <th>Nom</th>
         <th>Description</th>
         <th>Numéro</th>
-        <th>Prix</th>
+        <th>Prix (DA)</th>
         <th>Actions</th>
     </tr>
 
     <tr th:each="item : ${items}">
         <td>
-            <img th:if="${item.product.imageUrl}" th:src="${item.product.imageUrl}" alt="Produit">
+            <img th:if="${item.product.imageUrl}"
+                 th:src="${item.product.imageUrl}"
+                 alt="Produit">
         </td>
+
         <td th:text="${item.product.name}"></td>
-        <td th:text="${item.product.description}"></td>
+
+        <td class="desc"
+            th:text="${item.product.description}"
+            title="Voir description complète">
+        </td>
+
         <td th:text="${item.product.serialNumber}"></td>
+
         <td th:text="${item.price}"></td>
+
         <td>
-            <a th:href="@{/seller/products/edit/{itemId}(itemId=${item.id}, sellerId=${sellerId})}" class="btn">✏️ Modifier</a>
-            <a th:href="@{/seller/products/delete/{id}(id=${item.id}, sellerId=${sellerId})}" class="btn-delete">❌ Supprimer</a>
+            <div class="actions">
+                <a th:href="@{/seller/products/edit/{itemId}(itemId=${item.id}, sellerId=${sellerId})}"
+                   class="icon-btn edit-btn"
+                   title="Modifier">
+                    ✏️
+                </a>
+
+                <a th:href="@{/seller/products/delete/{itemId}(itemId=${item.id}, sellerId=${sellerId})}"
+                   class="icon-btn delete-btn"
+                   title="Supprimer">
+                    🗑️
+                </a>
+            </div>
         </td>
     </tr>
 </table>
-
 
 </body>
 </html>

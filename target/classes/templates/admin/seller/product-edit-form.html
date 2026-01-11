@@ -2,23 +2,83 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Modifier un produit</title>
+
     <style>
-        body { font-family: Arial; background: #fdebd0; padding: 40px; }
-        form { background: white; width: 420px; padding: 25px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,.15); }
-        h2 { color: #e67e22; }
-        label { font-weight: bold; margin-top: 10px; display: block; }
-        input { width: 100%; padding: 9px; margin-top: 5px; border-radius: 6px; border: 1px solid #f6c27a; }
-        button { margin-top: 20px; width: 100%; padding: 12px; background: #f39c12; color: white; border: none; border-radius: 6px; font-size: 16px; }
-        button:hover { background: #e67e22; }
+        body {
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            background: #f7f1e3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        form {
+            background: white;
+            width: 420px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,.15);
+        }
+
+        h2 {
+            text-align: center;
+            color: #000;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 12px;
+            display: block;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #f6c27a;
+        }
+
+        .preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .preview img {
+            width: 90px;
+            border-radius: 8px;
+            margin-top: 6px;
+        }
+
+        button {
+            margin-top: 22px;
+            width: 100%;
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2c80b4;
+        }
     </style>
 </head>
-<body>
 
-<h2>✏️ Modifier le Produit</h2>
+<body>
 
 <form th:action="@{/seller/products/update}"
       method="post"
       enctype="multipart/form-data">
+
+    <h2>✏️ Modifier le Produit</h2>
 
     <input type="hidden" name="itemId" th:value="${item.id}">
     <input type="hidden" name="sellerId" th:value="${sellerId}">
@@ -35,9 +95,13 @@
     <label>Prix (DA)</label>
     <input type="number" name="price" th:value="${item.price}" step="0.01" required>
 
-    <label>Image du produit</label>
+    <label>Nouvelle image (optionnelle)</label>
     <input type="file" name="image" accept="image/*">
-    <p>Image actuelle : <img th:src="${item.product.imageUrl}" width="80"/></p>
+
+    <div class="preview">
+        <p>Image actuelle</p>
+        <img th:src="${item.product.imageUrl}" alt="Image produit">
+    </div>
 
     <button type="submit">💾 Mettre à jour</button>
 </form>
