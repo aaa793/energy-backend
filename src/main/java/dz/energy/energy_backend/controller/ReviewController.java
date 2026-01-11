@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/products")
+@CrossOrigin(origins = "*")  // ✅ autorise toutes les origines (Android, Web, autres)
 public class ReviewController {
 
     private final ProductRepository productRepository;
@@ -28,6 +29,13 @@ public class ReviewController {
         this.imageUploadService = imageUploadService;
     }
 
+    /**
+     * Ajouter un avis pour un produit avec une image
+     * @param id id du produit
+     * @param comment texte de l'avis
+     * @param image fichier image de l'avis
+     * @return Review créé
+     */
     @PostMapping(
             value = "/{id}/reviews",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
@@ -38,11 +46,17 @@ public class ReviewController {
             @RequestParam("image") MultipartFile image
     ) {
 
+        // Vérifier si le produit existe
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produit introuvable"));
 
-        String imageUrl = imageUploadService.uploadImage(image);
+        // Vérifier si une image est envoyée
+        String imageUrl = null;
+        if (image != null && !image.isEmpty()) {
+            imageUrl = imageUploadService.uploadImage(image);
+        }
 
+        // Créer et sauvegarder le review
         Review review = new Review();
         review.setComment(comment);
         review.setImageUrl(imageUrl);
@@ -50,6 +64,4 @@ public class ReviewController {
 
         return reviewRepository.save(review);
     }
-
-
 }
