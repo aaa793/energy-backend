@@ -22,21 +22,19 @@ public class MobileProductController {
 
     @GetMapping("/products")
     public List<MobileProductDTO> getProductsForMobile() {
-
         return itemService.findAll().stream().map(item -> {
-
             Product product = item.getProduct();
 
             MobileProductDTO dto = new MobileProductDTO();
+            dto.setId(product.getId());   // <-- AJOUTER L’ID
             dto.setName(product.getName());
             dto.setDescription(product.getDescription());
             dto.setPrice(item.getPrice());
             dto.setCategory("Panneaux Solaires");
-
-            // ✅ URL Cloudinary DIRECTE
             dto.setImageResId(product.getImageUrl());
 
             return dto;
         }).collect(Collectors.toList());
     }
+
 }
