@@ -149,10 +149,17 @@ public class SellerController {
                          @RequestParam Integer sellerId) {
 
         ProductItem item = itemService.findById(itemId);
+
         if (item != null && item.getSeller().getId().equals(sellerId)) {
-            itemService.delete(itemId); // Supprime ProductItem + Product
+
+            Product product = item.getProduct();
+
+            itemService.delete(itemId);
+            productService.delete(product.getId());
         }
 
         return "redirect:/seller/products?sellerId=" + sellerId;
     }
+
+
 }
